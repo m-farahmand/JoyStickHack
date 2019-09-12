@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.IO.Ports;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace JoyStick
 {
@@ -42,32 +44,23 @@ namespace JoyStick
 
         string strtail = "";
 
-        public static List<TJoyStickData> GetValues(SerialPort comport, ref string err)
+        public static TJoyStickData GetValues(SerialPort comport, ref string err)
         {
-            List<TJoyStickData> lstprsn = new List<TJoyStickData>();
+            var code = new TJoyStickData();
             int structsize = Marshal.SizeOf(typeof(TJoyStickData));
             try
             {
-                string buf = "";
-                while (true)
-                {
-                    buf = strTail + ReadString(comport);
-                    if (string.IsNullOrEmpty(buf))
-                        break;
-                    strTail = "";
-                    if (structsize / 2 >= buf.Length) continue;
-                    var pbuf = Marshal.StringToBSTR(buf);
-                    var prsn = (TJoyStickData) Marshal.PtrToStructure(pbuf, typeof(TJoyStickData));
-                    lstprsn.Add(prsn);
-
-                    Marshal.FreeBSTR(pbuf);
-                }
+                var buf = ReadString(comport);
+                if (buf.Length < structsize / 2 || string.IsNullOrEmpty(buf)) return code;
+                var pbuf = Marshal.StringToBSTR(buf);
+                code = (TJoyStickData) Marshal.PtrToStructure(pbuf, typeof(TJoyStickData));
+                Marshal.FreeBSTR(pbuf);
             }
             catch (Exception exerr)
             {
                 err = exerr.Message;
             }
-            return lstprsn;
+            return code;
         }
 
         public static string strTail = "";
@@ -77,15 +70,11 @@ namespace JoyStick
             string res = "";
 
             int i = 0;
-            while (i != 10)
+            while (true)
             {
                 i = st.BaseStream.ReadByte();
-                if (i == -1)
-                {
-                    strTail = res;
-                    res = null;
+                if (i == 0)
                     break;
-                }
                 res += (char) i;
             }
             return res;

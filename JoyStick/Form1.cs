@@ -57,6 +57,8 @@ namespace JoyStick
             try
             {
                 serialPort1.Close();
+                serialPort1.BaudRate = 5300;
+                serialPort1.DataBits = 7;
                 serialPort1.PortName = cmbPort.Text;
                 serialPort1.Open();
                 serialPort1.DtrEnable = true;
@@ -120,7 +122,7 @@ namespace JoyStick
             {
                 var isportnamechanged = false;
 
-                Invoke(new MethodInvoker(delegate() { isportnamechanged = serialPort1.PortName != cmbPort.Text; }));
+                Invoke(new MethodInvoker(delegate { isportnamechanged = serialPort1.PortName != cmbPort.Text; }));
                 if (!serialPort1.IsOpen || isportnamechanged)
                 {
                     Invoke(new MethodInvoker(OpenCom));
@@ -128,15 +130,13 @@ namespace JoyStick
                 }
                 if (serialPort1.IsOpen)
                 {
-                    var dataList = JoyStickDataReader.GetValues(serialPort1, ref err);
-                    foreach (var data in dataList)
+                    var data = JoyStickDataReader.GetValues(serialPort1, ref err);
+
+                    Invoke(new MethodInvoker(delegate
                     {
-                        Invoke(new MethodInvoker(delegate
-                        {
-                            listBox1.Items.Add(data.Code + "==" + data.Direction);
-                            listBox1.TopIndex = listBox1.Items.Count - 1;
-                        }));
-                    }
+                        listBox1.Items.Add(data.Code + "==" + data.Direction);
+                        listBox1.TopIndex = listBox1.Items.Count - 1;
+                    }));
                 }
                 i++;
                 //
