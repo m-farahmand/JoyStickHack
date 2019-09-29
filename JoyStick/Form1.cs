@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Data;
+using System.IO.Ports;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows.Forms.VisualStyles;
 
 namespace JoyStick
 {
@@ -12,6 +14,7 @@ namespace JoyStick
         bool ValueCompleted = false;
         bool SendStop = false;
         DataTable tbl = new DataTable();
+        private JoyStickDataReader _joyStickDataReader;
 
         public Form1()
         {
@@ -49,8 +52,20 @@ namespace JoyStick
                 colgrd.Name = "col" + i;
                 MyGrid.Columns.Add(colgrd);
             }
+            CleanLabel();
         }
 
+        private void CleanLabel(string txtRU = "", string txtLU = "", string txtRD = "", string txtLD = "")
+        {
+            if (lblLU.Text != txtLU)
+                lblLU.Text = txtLU;
+            if (lblLD.Text != txtLD)
+                lblLD.Text = txtLD;
+            if (lblRD.Text != txtRD)
+                lblRD.Text = txtRD;
+            if (lblRU.Text != txtRU)
+                lblRU.Text = txtRU;
+        }
 
         private void OpenCom()
         {
@@ -59,12 +74,11 @@ namespace JoyStick
                 serialPort1.Close();
                 serialPort1.BaudRate = 5300;
                 serialPort1.DataBits = 7;
+                serialPort1.Parity = Parity.None;
+                serialPort1.StopBits = StopBits.One;
+                serialPort1.Handshake = Handshake.None;
                 serialPort1.PortName = cmbPort.Text;
                 serialPort1.Open();
-                serialPort1.DtrEnable = true;
-
-                serialPort1.RtsEnable = true;
-
                 settext(lblError, string.Format("ارتباط با {0} برقرار شد.", cmbPort.Text));
             }
             catch (Exception err)
@@ -93,8 +107,9 @@ namespace JoyStick
             }
         }
 
-        private void LoadUserList()
+        private void InitThread()
         {
+            _joyStickDataReader = new JoyStickDataReader();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -114,9 +129,7 @@ namespace JoyStick
 
         private void Start()
         {
-            var getinfo = true;
-            var i = 0;
-            LoadUserList();
+            InitThread();
             var err = "";
             while (true)
             {
@@ -126,22 +139,54 @@ namespace JoyStick
                 if (!serialPort1.IsOpen || isportnamechanged)
                 {
                     Invoke(new MethodInvoker(OpenCom));
-                    getinfo = true;
                 }
                 if (serialPort1.IsOpen)
                 {
                     var data = JoyStickDataReader.GetValues(serialPort1, ref err);
-
+                    if (string.IsNullOrEmpty(data.Sign)) continue;
                     Invoke(new MethodInvoker(delegate
                     {
-                        listBox1.Items.Add(data.Code + "==" + data.Direction);
-                        listBox1.TopIndex = listBox1.Items.Count - 1;
+                        var title = _joyStickDataReader.CalculateData(data.Sign);
+                        var caption = title + "=" + _joyStickDataReader.GetHexString(data.Code);
+                        lstRaw.Items.Add(caption);
+                        lstRaw.TopIndex = lstRaw.Items.Count - 1;
+                        var listData = (ListBox) null;
+                        switch (title)
+                        {
+                            case "RU":
+                                listData = lstRU;
+                                break;
+                            case "LU":
+                                listData = lstLU;
+                                break;
+                            case "RD":
+                                listData = lstRD;
+                                break;
+                            case "LD":
+                                listData = lstLD;
+                                break;
+                            case "S1":
+                            case "S2":
+                                listData = lstSep;
+                                break;
+                        }
+                        if (title != "S1" || title != "S2")
+                            CleanLabel(title == "RU" ? caption : "", title == "LU" ? caption : "",
+                                title == "RD" ? caption : "", title == "LD" ? caption : "");
+
+                        if (listData != null)
+                        {
+                            if (listData.Items.Count >0 &&
+                                (string) listData.Items[listData.Items.Count - 1] == caption) return;
+                            listData.Items.Add(caption);
+                            listData.TopIndex = listData.Items.Count - 1;
+                        }
+                        else
+                        {
+                            listData = null;
+                        }
                     }));
                 }
-                i++;
-                //
-                if (i > 60)
-                    i = 0;
                 Thread.Sleep(1);
             }
         }
@@ -158,6 +203,36 @@ namespace JoyStick
         private void btnEnd_Click(object sender, EventArgs e)
         {
             End();
+        }
+
+        private void btnSaveLog_Click(object sender, EventArgs e)
+        {
+            var err = "";
+            foreach (var item in lstRaw.Items)
+                JoyStickDataReader.WriteLog(item.ToString() + "\r\n", true, ref err);
+            lstRaw.Items.Clear();
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            lstRaw.Items.Clear();
+        }
+
+        private void list_Click(object sender, EventArgs e)
+        {
+            ListBox listTemp = null;
+            switch ((sender as Button).Tag)
+            {
+                case "RU": listTemp = lstRU;
+                    break;
+                case "LU": listTemp = lstLU;
+                    break;
+                case "RD": listTemp = lstRD;
+                    break;
+                case "LD": listTemp = lstLD;
+                    break;
+            }
+            listTemp.Items.Clear();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
