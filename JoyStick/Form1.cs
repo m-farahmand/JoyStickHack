@@ -25,47 +25,20 @@ namespace JoyStick
 
         private void init()
         {
-            cmbPort.SelectedIndex = 0;
-            DataColumn col = new DataColumn();
-            col.Caption = "شخص";
-            tbl.Columns.Add(col);
-            col = new DataColumn();
-            col.Caption = "کد کارت";
-            tbl.Columns.Add(col);
-            col = new DataColumn();
-            col.Caption = "تاریخ";
-            tbl.Columns.Add(col);
-            col = new DataColumn();
-            col.Caption = "زمان";
-            tbl.Columns.Add(col);
-            /* col = new DataColumn();
-             col.Caption = "کد متمایز کننده";
-             tbl.Columns.Add(col);*/
-            col = new DataColumn();
-            col.Caption = "ثبت";
-            tbl.Columns.Add(col);
-            for (int i = 0; i < tbl.Columns.Count; i++)
-            {
-                DataColumn col2 = tbl.Columns[i];
-                DataGridViewColumn colgrd = new DataGridViewColumn();
-                colgrd.CellTemplate = new DataGridViewTextBoxCell();
-                colgrd.HeaderText = col2.Caption;
-                colgrd.Name = "col" + i;
-                MyGrid.Columns.Add(colgrd);
-            }
+            cmbPort.SelectedIndex = 4;
             CleanLabel();
         }
 
         private void CleanLabel(string caption = "", DataItem dataItem = null)
         {
-            if(caption!="")
-            lblRD.BackColor = lblLD.BackColor = lblLU.BackColor = lblRU.BackColor = Color.Transparent;
+            if (caption != "")
+                lblRD.BackColor = lblLD.BackColor = lblLU.BackColor = lblRU.BackColor = Color.Transparent;
             Label temp = null;
-            if (dataItem == null ||  dataItem.Sign == Sign.Lp)
+            if (dataItem == null || dataItem.Sign == Sign.Lp)
                 temp = lblRU;
-            if (dataItem == null ||  dataItem.Sign == Sign.Ln)
+            if (dataItem == null || dataItem.Sign == Sign.Ln)
                 temp = lblLD;
-            if (dataItem == null ||  dataItem.Sign == Sign.Rn)
+            if (dataItem == null || dataItem.Sign == Sign.Rn)
                 temp = lblRD;
             if (dataItem == null || dataItem.Sign == Sign.Rp)
                 temp = lblLU;
@@ -80,7 +53,7 @@ namespace JoyStick
             try
             {
                 serialPort1.Close();
-                serialPort1.BaudRate = 4800;
+                serialPort1.BaudRate = 5300;
                 serialPort1.DataBits = 7;
                 serialPort1.Parity = Parity.None;
                 serialPort1.StopBits = StopBits.One;
@@ -158,7 +131,9 @@ namespace JoyStick
                         if (dataItem == null)
                             return;
                         var caption = dataItem.Title + "=" +
-                                      _joyStickDataReader.GetHexString(data.Code, dataItem.Title.Contains("D"));
+                                      _joyStickDataReader.GetHexString(data.SpeedHighSide, dataItem) + ":" +
+                                      _joyStickDataReader.GetHexString(data.SpeedLowSide, dataItem);
+
                         lstRaw.Items.Add(caption);
                         lstRaw.TopIndex = lstRaw.Items.Count - 1;
                         var listData = (ListBox) null;
@@ -183,7 +158,14 @@ namespace JoyStick
                                 throw new ArgumentOutOfRangeException();
                         }
                         if (dataItem.Sign != Sign.Separator)
+                        {
                             CleanLabel(caption, dataItem);
+                            var speed = JoyStickDataReader.ClampToSbyte(_joyStickDataReader.GetSpeed(
+                                            _joyStickDataReader.GetIntString(data.SpeedHighSide + data.SpeedLowSide,
+                                                dataItem)), dataItem.Sign == Sign.Rp | dataItem.Sign == Sign.Lp);
+
+                            (dataItem.Sign == Sign.Ln | dataItem.Sign == Sign.Lp ? lblSpeedL : lblSpeedR).Text = speed.ToString();
+                        }
 
                         if (listData != null)
                         {

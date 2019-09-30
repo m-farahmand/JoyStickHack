@@ -24,7 +24,9 @@ namespace JoyStick
     public struct TJoyStickData
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 3)] public string Sign;
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 5)] public string Code;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 2)] public string SpeedHighSide;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1)] public string Sperator;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 2)] public string SpeedLowSide;
     }
 
     public class DataItem
@@ -52,6 +54,8 @@ namespace JoyStick
 
     public class JoyStickDataReader
     {
+        public const int SPEED_MIN = 0;
+        public const int SPEED_MAX = 3000;//oct~=5555
         public DataItem[] List { get; set; }
         public DataMap[] MapList { get; set; }
 
@@ -91,28 +95,43 @@ namespace JoyStick
             return res;
         }
 
-        public string GetHexString(string data, bool dir)
+        public string GetHexString(string data, DataItem dataItem)
+        {
+            return BitConverter.ToString(MapBytes(data, dataItem));
+        }
+
+        public byte[] MapBytes(string data, DataItem dataItem)
         {
             var bytes = Encoding.Default.GetBytes(data);
             for (var i = 0; i < bytes.Length; i++)
             {
                 var mapItem = MapList.SingleOrDefault(x => x.From == bytes[i]);
                 if (mapItem != null)
-                    bytes[i] = dir ? mapItem.P : mapItem.N;
+                    bytes[i] = (dataItem.Sign == Sign.Ln | dataItem.Sign == Sign.Rn) ? mapItem.P : mapItem.N;
             }
-            return BitConverter.ToString(bytes);
+            return bytes;
         }
 
-        public static string StringToBinary(string data)
+        public string GetIntString(string data, DataItem dataItem)
         {
-            var sb = new StringBuilder();
-
-            foreach (var c in data.ToCharArray())
+            var tmp = "";
+            foreach (var item in MapBytes(data, dataItem))
             {
-                sb.Append(Convert.ToString(c, 2).PadLeft(8, '0'));
-                sb.Append('-');
+                tmp += item;
             }
-            return sb.ToString();
+            return tmp;
+        }
+
+        public int GetSpeed(string speed)
+        {
+            var tmp = 0;
+            var baseInt = 8;
+            for (var i = 0; i < speed.Length; i++)
+            {
+                var ch = speed[speed.Length-i-1];
+                tmp += (ch-0x30) * (int)Math.Pow(baseInt,  i);
+            }
+            return tmp;
         }
 
         public static bool IsContain(string data, byte[] substr)
@@ -120,18 +139,6 @@ namespace JoyStick
             return data.StartsWith(Encoding.ASCII.GetString(substr));
         }
 
-        public static int Cnv_ToInt(string stritm)
-        {
-            int i = -1;
-            try
-            {
-                i = Convert.ToInt16(stritm);
-            }
-            catch
-            {
-            }
-            return i;
-        }
 
         public static long Cnv_ToLong(string stritm)
         {
@@ -184,6 +191,10 @@ namespace JoyStick
             return res;
         }
 
+        public static sbyte ClampToSbyte(int value,bool positive)
+        {
+            return (sbyte)(sbyte.MaxValue / (float)SPEED_MAX * value*(positive?1:-1));
+        }
         public static void WriteLog(string str, bool append, ref string err)
         {
             try

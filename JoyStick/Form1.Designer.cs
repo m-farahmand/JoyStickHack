@@ -34,7 +34,6 @@
             this.lblLD = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.lblDeviceInfo = new System.Windows.Forms.Label();
             this.lblError = new System.Windows.Forms.Label();
             this.lblRD = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
@@ -55,6 +54,11 @@
             this.lstRD = new System.Windows.Forms.ListBox();
             this.lstLD = new System.Windows.Forms.ListBox();
             this.lstSep = new System.Windows.Forms.ListBox();
+            this.lblSpeedR = new System.Windows.Forms.Label();
+            this.lblSpeedL = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MyGrid)).BeginInit();
@@ -116,35 +120,29 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 878F));
-            this.tableLayoutPanel1.Controls.Add(this.lblDeviceInfo, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblError, 1, 2);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(785, 3);
+            this.tableLayoutPanel1.Controls.Add(this.lblSpeedR, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.lblSpeedL, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label4, 0, 2);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(738, 3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(316, 79);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(363, 65);
             this.tableLayoutPanel1.TabIndex = 10;
-            // 
-            // lblDeviceInfo
-            // 
-            this.lblDeviceInfo.AutoSize = true;
-            this.lblDeviceInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDeviceInfo.Location = new System.Drawing.Point(-671, 3);
-            this.lblDeviceInfo.Name = "lblDeviceInfo";
-            this.lblDeviceInfo.Size = new System.Drawing.Size(872, 16);
-            this.lblDeviceInfo.TabIndex = 0;
             // 
             // lblError
             // 
             this.lblError.AutoSize = true;
             this.lblError.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblError.Location = new System.Drawing.Point(-671, 42);
+            this.lblError.Location = new System.Drawing.Point(-624, 42);
             this.lblError.Name = "lblError";
-            this.lblError.Size = new System.Drawing.Size(872, 16);
+            this.lblError.Size = new System.Drawing.Size(872, 20);
             this.lblError.TabIndex = 1;
             // 
             // lblRD
@@ -284,7 +282,6 @@
             this.cmbPort.Name = "cmbPort";
             this.cmbPort.Size = new System.Drawing.Size(51, 21);
             this.cmbPort.TabIndex = 7;
-            this.cmbPort.ValueMember = "COM5";
             // 
             // lstRaw
             // 
@@ -350,6 +347,51 @@
             this.lstSep.Size = new System.Drawing.Size(182, 289);
             this.lstSep.TabIndex = 8;
             // 
+            // lblSpeedR
+            // 
+            this.lblSpeedR.AutoSize = true;
+            this.lblSpeedR.Location = new System.Drawing.Point(213, 22);
+            this.lblSpeedR.Name = "lblSpeedR";
+            this.lblSpeedR.Size = new System.Drawing.Size(35, 13);
+            this.lblSpeedR.TabIndex = 2;
+            this.lblSpeedR.Text = "label1";
+            // 
+            // lblSpeedL
+            // 
+            this.lblSpeedL.AutoSize = true;
+            this.lblSpeedL.Location = new System.Drawing.Point(213, 3);
+            this.lblSpeedL.Name = "lblSpeedL";
+            this.lblSpeedL.Size = new System.Drawing.Size(35, 13);
+            this.lblSpeedL.TabIndex = 2;
+            this.lblSpeedL.Text = "label1";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(296, 22);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(61, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "موتور راست";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(307, 3);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(50, 13);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "موتور چپ";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(292, 42);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(65, 13);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "وضعیت پورت";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -382,7 +424,6 @@
         private System.IO.Ports.SerialPort serialPort1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Label lblDeviceInfo;
         private System.Windows.Forms.Button btnEnd;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.ComboBox cmbPort;
@@ -405,6 +446,11 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label lblSpeedR;
+        private System.Windows.Forms.Label lblSpeedL;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label4;
     }
 }
 
