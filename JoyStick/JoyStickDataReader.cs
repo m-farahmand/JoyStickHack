@@ -19,7 +19,7 @@ namespace JoyStick
 1A 5B 5A = Seperator
 1A 5B 52 = Seperator*/
 
-        
+
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
     public struct TJoyStickData
     {
@@ -29,6 +29,7 @@ namespace JoyStick
 
     public class DataItem
     {
+        public Sign Sign { get; set; }
         public string Title { get; set; }
         public byte[] Value { get; set; }
     }
@@ -36,12 +37,24 @@ namespace JoyStick
     public class DataMap
     {
         public byte From { get; set; }
-        public byte To { get; set; }
+        public byte P { get; set; }
+        public byte N { get; set; }
     }
+
+    public enum Sign
+    {
+        Ln = 1,
+        Lp = 2,
+        Rn = 3,
+        Rp = 4,
+        Separator = 5
+    }
+
     public class JoyStickDataReader
     {
         public DataItem[] List { get; set; }
-        public  DataMap[] MapList{ get; set; }
+        public DataMap[] MapList { get; set; }
+
         public JoyStickDataReader()
         {
             InitDataStructure();
@@ -51,44 +64,46 @@ namespace JoyStick
         {
             List = new[]
             {
-                new DataItem {Title = "LU", Value = new byte[] {0x5a, 0x5b, 0x53}},
-                new DataItem {Title = "RU", Value = new byte[] {0x5a, 0x5b, 0x5b}},
-                new DataItem {Title = "LD", Value = new byte[] {0x5a, 0x5b, 0x1b}},
-                new DataItem {Title = "RD", Value = new byte[] {0x5a, 0x5b, 0x13}},
-                new DataItem {Title = "S1", Value = new byte[] {0x1a, 0x5b, 0x5a}},
-                new DataItem {Title = "S2", Value = new byte[] {0x1a, 0x5b, 0x52}},
+                new DataItem {Sign = Sign.Rp, Title = "+R", Value = new byte[] {0x5a, 0x5b, 0x53}},
+                new DataItem {Sign = Sign.Lp, Title = "+L", Value = new byte[] {0x5a, 0x5b, 0x5b}},
+                new DataItem {Sign = Sign.Ln, Title = "-L", Value = new byte[] {0x5a, 0x5b, 0x1b}},
+                new DataItem {Sign = Sign.Rn, Title = "-R", Value = new byte[] {0x5a, 0x5b, 0x13}},
+                new DataItem {Sign = Sign.Separator, Title = "S1", Value = new byte[] {0x1a, 0x5b, 0x5a}},
+                new DataItem {Sign = Sign.Separator, Title = "S2", Value = new byte[] {0x1a, 0x5b, 0x52}},
             };
             MapList = new[]
             {
-                new DataMap{From = 0x12,To=0x1},new DataMap{From = 0x52,To=0x2},new DataMap{From = 0x1a,To=0x3},new DataMap{From = 0x5a,To=0x4},
-                new DataMap{From = 0x13,To=0x8},new DataMap{From = 0x53,To=0xA},new DataMap{From = 0x1B,To=0xB},new DataMap{From = 0x5B,To=0xC},
+                new DataMap {From = 0x12, P = 0x0, N = 0x7}, new DataMap {From = 0x52, P = 0x1, N = 0x6},
+                new DataMap {From = 0x1a, P = 0x2, N = 0x5}, new DataMap {From = 0x5a, P = 0x3, N = 0x4},
+                new DataMap {From = 0x13, P = 0x4, N = 0x3}, new DataMap {From = 0x53, P = 0x5, N = 0x2},
+                new DataMap {From = 0x1B, P = 0x6, N = 0x1}, new DataMap {From = 0x5B, P = 0x7, N = 0x0},
             };
         }
 
-        public string CalculateData(string data)
+        public DataItem CalculateData(string data)
         {
-            var res = "";
+            DataItem res = null;
             foreach (var dataItem in List)
             {
                 if (IsContain(data, dataItem.Value))
-                    res = dataItem.Title;
+                    res = dataItem;
             }
             return res;
         }
 
-        public string GetHexString(string data)
+        public string GetHexString(string data, bool dir)
         {
             var bytes = Encoding.Default.GetBytes(data);
             for (var i = 0; i < bytes.Length; i++)
             {
-               var mapItem= MapList.SingleOrDefault(x => x.From == bytes[i]);
+                var mapItem = MapList.SingleOrDefault(x => x.From == bytes[i]);
                 if (mapItem != null)
-                    bytes[i] = mapItem.To;
+                    bytes[i] = dir ? mapItem.P : mapItem.N;
             }
             return BitConverter.ToString(bytes);
         }
 
-         public static string StringToBinary(string data)
+        public static string StringToBinary(string data)
         {
             var sb = new StringBuilder();
 
@@ -169,7 +184,7 @@ namespace JoyStick
             return res;
         }
 
-        public static void WriteLog(string str, bool append , ref string err)
+        public static void WriteLog(string str, bool append, ref string err)
         {
             try
             {

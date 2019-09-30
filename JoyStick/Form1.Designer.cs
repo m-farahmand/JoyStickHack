@@ -31,12 +31,21 @@
             this.components = new System.ComponentModel.Container();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblLD = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.lblDeviceInfo = new System.Windows.Forms.Label();
             this.lblError = new System.Windows.Forms.Label();
+            this.lblRD = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnSaveLog = new System.Windows.Forms.Button();
+            this.lblLU = new System.Windows.Forms.Label();
             this.btnEnd = new System.Windows.Forms.Button();
+            this.lblRU = new System.Windows.Forms.Label();
             this.btnStart = new System.Windows.Forms.Button();
             this.cmbPort = new System.Windows.Forms.ComboBox();
             this.lstRaw = new System.Windows.Forms.ListBox();
@@ -46,15 +55,6 @@
             this.lstRD = new System.Windows.Forms.ListBox();
             this.lstLD = new System.Windows.Forms.ListBox();
             this.lstSep = new System.Windows.Forms.ListBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.lblRU = new System.Windows.Forms.Label();
-            this.lblLU = new System.Windows.Forms.Label();
-            this.lblRD = new System.Windows.Forms.Label();
-            this.lblLD = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MyGrid)).BeginInit();
@@ -90,6 +90,24 @@
             this.panel1.Size = new System.Drawing.Size(1252, 110);
             this.panel1.TabIndex = 0;
             // 
+            // lblLD
+            // 
+            this.lblLD.AutoSize = true;
+            this.lblLD.Location = new System.Drawing.Point(988, 90);
+            this.lblLD.Name = "lblLD";
+            this.lblLD.Size = new System.Drawing.Size(42, 13);
+            this.lblLD.TabIndex = 12;
+            this.lblLD.Text = "no text";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(0, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "label2";
+            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -97,7 +115,7 @@
             this.tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.InsetDouble;
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 875F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 878F));
             this.tableLayoutPanel1.Controls.Add(this.lblDeviceInfo, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblError, 1, 2);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(785, 3);
@@ -115,19 +133,76 @@
             // 
             this.lblDeviceInfo.AutoSize = true;
             this.lblDeviceInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDeviceInfo.Location = new System.Drawing.Point(-668, 3);
+            this.lblDeviceInfo.Location = new System.Drawing.Point(-671, 3);
             this.lblDeviceInfo.Name = "lblDeviceInfo";
-            this.lblDeviceInfo.Size = new System.Drawing.Size(869, 16);
+            this.lblDeviceInfo.Size = new System.Drawing.Size(872, 16);
             this.lblDeviceInfo.TabIndex = 0;
             // 
             // lblError
             // 
             this.lblError.AutoSize = true;
             this.lblError.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblError.Location = new System.Drawing.Point(-668, 42);
+            this.lblError.Location = new System.Drawing.Point(-671, 42);
             this.lblError.Name = "lblError";
-            this.lblError.Size = new System.Drawing.Size(869, 16);
+            this.lblError.Size = new System.Drawing.Size(872, 16);
             this.lblError.TabIndex = 1;
+            // 
+            // lblRD
+            // 
+            this.lblRD.AutoSize = true;
+            this.lblRD.Location = new System.Drawing.Point(735, 90);
+            this.lblRD.Name = "lblRD";
+            this.lblRD.Size = new System.Drawing.Size(42, 13);
+            this.lblRD.TabIndex = 12;
+            this.lblRD.Text = "no text";
+            // 
+            // button4
+            // 
+            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button4.Location = new System.Drawing.Point(939, 85);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(44, 23);
+            this.button4.TabIndex = 9;
+            this.button4.Tag = "LD";
+            this.button4.Text = "Clear";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.list_Click);
+            // 
+            // button3
+            // 
+            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button3.Location = new System.Drawing.Point(685, 83);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(44, 23);
+            this.button3.TabIndex = 9;
+            this.button3.Tag = "RD";
+            this.button3.Text = "Clear";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.list_Click);
+            // 
+            // button2
+            // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.Location = new System.Drawing.Point(425, 82);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(44, 23);
+            this.button2.TabIndex = 9;
+            this.button2.Tag = "LU";
+            this.button2.Text = "Clear";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.list_Click);
+            // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Location = new System.Drawing.Point(153, 83);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(44, 23);
+            this.button1.TabIndex = 9;
+            this.button1.Tag = "RU";
+            this.button1.Text = "Clear";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.list_Click);
             // 
             // btnClear
             // 
@@ -151,6 +226,15 @@
             this.btnSaveLog.UseVisualStyleBackColor = true;
             this.btnSaveLog.Click += new System.EventHandler(this.btnSaveLog_Click);
             // 
+            // lblLU
+            // 
+            this.lblLU.AutoSize = true;
+            this.lblLU.Location = new System.Drawing.Point(509, 90);
+            this.lblLU.Name = "lblLU";
+            this.lblLU.Size = new System.Drawing.Size(42, 13);
+            this.lblLU.TabIndex = 12;
+            this.lblLU.Text = "no text";
+            // 
             // btnEnd
             // 
             this.btnEnd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -162,6 +246,15 @@
             this.btnEnd.Text = "End";
             this.btnEnd.UseVisualStyleBackColor = true;
             this.btnEnd.Click += new System.EventHandler(this.btnEnd_Click);
+            // 
+            // lblRU
+            // 
+            this.lblRU.AutoSize = true;
+            this.lblRU.Location = new System.Drawing.Point(236, 90);
+            this.lblRU.Name = "lblRU";
+            this.lblRU.Size = new System.Drawing.Size(42, 13);
+            this.lblRU.TabIndex = 12;
+            this.lblRU.Text = "no text";
             // 
             // btnStart
             // 
@@ -177,6 +270,7 @@
             // cmbPort
             // 
             this.cmbPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbPort.DisplayMember = "COM5";
             this.cmbPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbPort.FormattingEnabled = true;
             this.cmbPort.Items.AddRange(new object[] {
@@ -190,6 +284,7 @@
             this.cmbPort.Name = "cmbPort";
             this.cmbPort.Size = new System.Drawing.Size(51, 21);
             this.cmbPort.TabIndex = 7;
+            this.cmbPort.ValueMember = "COM5";
             // 
             // lstRaw
             // 
@@ -254,99 +349,6 @@
             this.lstSep.Name = "lstSep";
             this.lstSep.Size = new System.Drawing.Size(182, 289);
             this.lstSep.TabIndex = 8;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(0, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "label2";
-            // 
-            // lblRU
-            // 
-            this.lblRU.AutoSize = true;
-            this.lblRU.Location = new System.Drawing.Point(236, 90);
-            this.lblRU.Name = "lblRU";
-            this.lblRU.Size = new System.Drawing.Size(42, 13);
-            this.lblRU.TabIndex = 12;
-            this.lblRU.Text = "no text";
-            // 
-            // lblLU
-            // 
-            this.lblLU.AutoSize = true;
-            this.lblLU.Location = new System.Drawing.Point(509, 90);
-            this.lblLU.Name = "lblLU";
-            this.lblLU.Size = new System.Drawing.Size(42, 13);
-            this.lblLU.TabIndex = 12;
-            this.lblLU.Text = "no text";
-            // 
-            // lblRD
-            // 
-            this.lblRD.AutoSize = true;
-            this.lblRD.Location = new System.Drawing.Point(735, 90);
-            this.lblRD.Name = "lblRD";
-            this.lblRD.Size = new System.Drawing.Size(42, 13);
-            this.lblRD.TabIndex = 12;
-            this.lblRD.Text = "no text";
-            // 
-            // lblLD
-            // 
-            this.lblLD.AutoSize = true;
-            this.lblLD.Location = new System.Drawing.Point(988, 90);
-            this.lblLD.Name = "lblLD";
-            this.lblLD.Size = new System.Drawing.Size(42, 13);
-            this.lblLD.TabIndex = 12;
-            this.lblLD.Text = "no text";
-            // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(153, 83);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(44, 23);
-            this.button1.TabIndex = 9;
-            this.button1.Tag = "RU";
-            this.button1.Text = "Clear";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.list_Click);
-            // 
-            // button2
-            // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(425, 82);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(44, 23);
-            this.button2.TabIndex = 9;
-            this.button2.Tag = "LU";
-            this.button2.Text = "Clear";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.list_Click);
-            // 
-            // button3
-            // 
-            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.Location = new System.Drawing.Point(685, 83);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(44, 23);
-            this.button3.TabIndex = 9;
-            this.button3.Tag = "RD";
-            this.button3.Text = "Clear";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.list_Click);
-            // 
-            // button4
-            // 
-            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(939, 85);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(44, 23);
-            this.button4.TabIndex = 9;
-            this.button4.Tag = "LD";
-            this.button4.Text = "Clear";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.list_Click);
             // 
             // Form1
             // 

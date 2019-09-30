@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Drawing;
 using System.IO.Ports;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
@@ -55,16 +56,23 @@ namespace JoyStick
             CleanLabel();
         }
 
-        private void CleanLabel(string txtRU = "", string txtLU = "", string txtRD = "", string txtLD = "")
+        private void CleanLabel(string caption = "", DataItem dataItem = null)
         {
-            if (lblLU.Text != txtLU)
-                lblLU.Text = txtLU;
-            if (lblLD.Text != txtLD)
-                lblLD.Text = txtLD;
-            if (lblRD.Text != txtRD)
-                lblRD.Text = txtRD;
-            if (lblRU.Text != txtRU)
-                lblRU.Text = txtRU;
+            if(caption!="")
+            lblRD.BackColor = lblLD.BackColor = lblLU.BackColor = lblRU.BackColor = Color.Transparent;
+            Label temp = null;
+            if (dataItem == null ||  dataItem.Sign == Sign.Lp)
+                temp = lblRU;
+            if (dataItem == null ||  dataItem.Sign == Sign.Ln)
+                temp = lblLD;
+            if (dataItem == null ||  dataItem.Sign == Sign.Rn)
+                temp = lblRD;
+            if (dataItem == null || dataItem.Sign == Sign.Rp)
+                temp = lblLU;
+            if (temp == null)
+                return;
+            temp.Text = caption;
+            temp.BackColor = Color.LimeGreen;
         }
 
         private void OpenCom()
@@ -72,7 +80,7 @@ namespace JoyStick
             try
             {
                 serialPort1.Close();
-                serialPort1.BaudRate = 5300;
+                serialPort1.BaudRate = 4800;
                 serialPort1.DataBits = 7;
                 serialPort1.Parity = Parity.None;
                 serialPort1.StopBits = StopBits.One;
@@ -146,37 +154,40 @@ namespace JoyStick
                     if (string.IsNullOrEmpty(data.Sign)) continue;
                     Invoke(new MethodInvoker(delegate
                     {
-                        var title = _joyStickDataReader.CalculateData(data.Sign);
-                        var caption = title + "=" + _joyStickDataReader.GetHexString(data.Code);
+                        var dataItem = _joyStickDataReader.CalculateData(data.Sign);
+                        if (dataItem == null)
+                            return;
+                        var caption = dataItem.Title + "=" +
+                                      _joyStickDataReader.GetHexString(data.Code, dataItem.Title.Contains("D"));
                         lstRaw.Items.Add(caption);
                         lstRaw.TopIndex = lstRaw.Items.Count - 1;
                         var listData = (ListBox) null;
-                        switch (title)
+                        switch (dataItem.Sign)
                         {
-                            case "RU":
-                                listData = lstRU;
-                                break;
-                            case "LU":
-                                listData = lstLU;
-                                break;
-                            case "RD":
-                                listData = lstRD;
-                                break;
-                            case "LD":
+                            case Sign.Ln:
                                 listData = lstLD;
                                 break;
-                            case "S1":
-                            case "S2":
+                            case Sign.Lp:
+                                listData = lstRU;
+                                break;
+                            case Sign.Rn:
+                                listData = lstRD;
+                                break;
+                            case Sign.Rp:
+                                listData = lstLU;
+                                break;
+                            case Sign.Separator:
                                 listData = lstSep;
                                 break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
                         }
-                        if (title != "S1" || title != "S2")
-                            CleanLabel(title == "RU" ? caption : "", title == "LU" ? caption : "",
-                                title == "RD" ? caption : "", title == "LD" ? caption : "");
+                        if (dataItem.Sign != Sign.Separator)
+                            CleanLabel(caption, dataItem);
 
                         if (listData != null)
                         {
-                            if (listData.Items.Count >0 &&
+                            if (listData.Items.Count > 0 &&
                                 (string) listData.Items[listData.Items.Count - 1] == caption) return;
                             listData.Items.Add(caption);
                             listData.TopIndex = listData.Items.Count - 1;
@@ -223,13 +234,17 @@ namespace JoyStick
             ListBox listTemp = null;
             switch ((sender as Button).Tag)
             {
-                case "RU": listTemp = lstRU;
+                case "RU":
+                    listTemp = lstRU;
                     break;
-                case "LU": listTemp = lstLU;
+                case "LU":
+                    listTemp = lstLU;
                     break;
-                case "RD": listTemp = lstRD;
+                case "RD":
+                    listTemp = lstRD;
                     break;
-                case "LD": listTemp = lstLD;
+                case "LD":
+                    listTemp = lstLD;
                     break;
             }
             listTemp.Items.Clear();
